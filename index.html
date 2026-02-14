@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude Builder Club — IIT Madras</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,600;1,9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ───────── NAVBAR ───────── -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <img src="claude_logo.jpg" alt="Claude" class="claude-logo-img" />
+        <span class="logo-text">Builder Club</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#about">About</a>
+        <a href="#activities">Activities</a>
+        <a href="#updates">Updates</a>
+        <a href="#join">Join</a>
+      </div>
+      <div class="nav-actions" id="navActions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <a href="https://www.jotform.com/253566966596075" target="_blank" class="btn-nav">Check In</a>
+        <a href="#join" class="btn-nav btn-nav-dark">Join the Club</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ───────── HERO ───────── -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-logo-row">
+        <img src="claude_logo.jpg" alt="Claude" class="hero-logo-img" />
+      </div>
+      <p class="hero-sub-brand">Builder Club</p>
+      <h1 class="hero-title reveal">
+        Welcome to the Claude<br>Builder Club — IIT Madras
+      </h1>
+      <div class="hero-icons reveal">
+        <div class="icon-tile tile-pink">
+          <!-- cursor + nodes -->
+          <svg viewBox="0 0 80 80" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 60L30 25L45 42L58 38L30 25"/>
+            <circle cx="58" cy="20" r="4" fill="#1A1A1A" stroke="none"/>
+            <circle cx="22" cy="18" r="3" fill="#1A1A1A" stroke="none"/>
+            <line x1="30" y1="25" x2="58" y2="20"/>
+            <line x1="30" y1="25" x2="22" y2="18"/>
+            <circle cx="62" cy="45" r="3" fill="#1A1A1A" stroke="none"/>
+            <line x1="45" y1="42" x2="62" y2="45"/>
+          </svg>
+        </div>
+        <div class="icon-tile tile-olive">
+          <!-- brain/layers -->
+          <svg viewBox="0 0 80 80" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M40 16C28 16 22 26 22 34C22 42 28 48 34 48C28 52 26 60 40 64C54 60 52 52 46 48C52 48 58 42 58 34C58 26 52 16 40 16Z"/>
+            <path d="M40 24C33 24 29 30 29 35C29 40 33 44 37 44C33 47 32 52 40 54C48 52 47 47 43 44C47 44 51 40 51 35C51 30 47 24 40 24Z"/>
+            <circle cx="40" cy="36" r="5"/>
+          </svg>
+        </div>
+        <div class="icon-tile tile-blue">
+          <!-- sunburst -->
+          <svg viewBox="0 0 80 80" fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round">
+            <circle cx="40" cy="40" r="10" fill="#fff" stroke="none"/>
+            <line x1="40" y1="6" x2="40" y2="26" /><line x1="40" y1="54" x2="40" y2="74"/>
+            <line x1="6" y1="40" x2="26" y2="40" /><line x1="54" y1="40" x2="74" y2="40"/>
+            <line x1="16" y1="16" x2="29" y2="29"/><line x1="51" y1="51" x2="64" y2="64"/>
+            <line x1="64" y1="16" x2="51" y2="29"/><line x1="29" y1="51" x2="16" y2="64"/>
+            <line x1="40" y1="6" x2="40" y2="26"/><line x1="28" y1="8" x2="33" y2="27"/>
+            <line x1="52" y1="8" x2="47" y2="27"/><line x1="12" y1="24" x2="28" y2="33"/>
+            <line x1="68" y1="24" x2="52" y2="33"/><line x1="8" y1="52" x2="27" y2="47"/>
+            <line x1="72" y1="52" x2="53" y2="47"/><line x1="28" y1="72" x2="33" y2="53"/>
+            <line x1="52" y1="72" x2="47" y2="53"/><line x1="12" y1="56" x2="28" y2="47"/>
+            <line x1="68" y1="56" x2="52" y2="47"/>
+          </svg>
+        </div>
+        <div class="icon-tile tile-orange">
+          <!-- network/molecule -->
+          <svg viewBox="0 0 80 80" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="40" cy="28" r="6" fill="#1A1A1A" stroke="none"/>
+            <circle cx="22" cy="52" r="5" fill="#1A1A1A" stroke="none"/>
+            <circle cx="58" cy="52" r="5" fill="#1A1A1A" stroke="none"/>
+            <circle cx="18" cy="28" r="3.5" fill="#1A1A1A" stroke="none"/>
+            <circle cx="62" cy="28" r="3.5" fill="#1A1A1A" stroke="none"/>
+            <circle cx="40" cy="64" r="3.5" fill="#1A1A1A" stroke="none"/>
+            <line x1="40" y1="28" x2="22" y2="52"/><line x1="40" y1="28" x2="58" y2="52"/>
+            <line x1="22" y1="52" x2="58" y2="52"/>
+            <line x1="40" y1="28" x2="18" y2="28"/><line x1="40" y1="28" x2="62" y2="28"/>
+            <line x1="22" y1="52" x2="40" y2="64"/><line x1="58" y1="52" x2="40" y2="64"/>
+          </svg>
+        </div>
+        <div class="icon-tile tile-lightpink">
+          <!-- code blocks -->
+          <svg viewBox="0 0 80 80" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 24H38V18H50V24H62V42H50V48H38V42H18V24Z"/>
+            <path d="M26 42V56H44V62H58V48H44V42"/>
+          </svg>
+        </div>
+      </div>
+      <p class="hero-sub reveal">
+        A community of developers, designers & entrepreneurs at IIT Madras —<br>
+        building real products powered by Claude AI.
+      </p>
+      <div class="hero-actions reveal">
+        <a href="https://www.jotform.com/253555944387168" target="_blank" class="btn btn-dark">Express Interest</a>
+        <a href="https://www.jotform.com/253566966596075" target="_blank" class="btn btn-outline">Member Check-In</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ───────── ABOUT ───────── -->
+  <section class="about" id="about">
+    <div class="container">
+      <h2 class="section-title reveal">What is Claude Builder Club?</h2>
+      <p class="section-desc reveal">
+        We're the official Claude Builder community at IIT Madras. A space where students and creators come together to learn, build, and ship AI-powered products using Anthropic's Claude platform.
+      </p>
+      <div class="about-cards">
+        <div class="about-card reveal">
+          <div class="card-icon tile-pink">
+            <svg viewBox="0 0 80 80" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="30" cy="30" r="10"/><circle cx="50" cy="30" r="10"/><circle cx="40" cy="48" r="10"/>
+              <circle cx="30" cy="30" r="3" fill="#1A1A1A" stroke="none"/>
+              <circle cx="50" cy="30" r="3" fill="#1A1A1A" stroke="none"/>
+              <circle cx="40" cy="48" r="3" fill="#1A1A1A" stroke="none"/>
+            </svg>
+          </div>
+          <h3>Community First</h3>
+          <p>Connect with fellow IIT Madras builders. Collaborate on projects, exchange ideas, and grow your network.</p>
+        </div>
+        <div class="about-card reveal">
+          <div class="card-icon tile-blue">
+            <svg viewBox="0 0 80 80" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="16" y="20" width="48" height="34" rx="4"/>
+              <path d="M28 36L36 44L52 28"/>
+              <line x1="28" y1="60" x2="52" y2="60"/>
+              <line x1="40" y1="54" x2="40" y2="60"/>
+            </svg>
+          </div>
+          <h3>Cutting-Edge Tools</h3>
+          <p>Access Claude APIs, prompt libraries, starter kits, and exclusive tooling that accelerates your workflow.</p>
+        </div>
+        <div class="about-card reveal">
+          <div class="card-icon tile-orange">
+            <svg viewBox="0 0 80 80" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="40,14 50,34 72,38 56,54 60,76 40,64 20,76 24,54 8,38 30,34"/>
+            </svg>
+          </div>
+          <h3>Learn, Build & Ship</h3>
+          <p>Weekly sessions, hackathons, and mentorship — go from idea to deployed product in record time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── ACTIVITIES ───────── -->
+  <section class="activities" id="activities">
+    <div class="container">
+      <h2 class="section-title reveal">What we do</h2>
+      <div class="activity-grid">
+        <div class="activity-card reveal">
+          <div class="activity-visual tile-olive">
+            <svg viewBox="0 0 100 100" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="18" y="14" width="64" height="44" rx="5"/>
+              <path d="M30 32L40 42L30 52"/>
+              <line x1="46" y1="52" x2="62" y2="52"/>
+              <line x1="36" y1="64" x2="64" y2="64"/>
+              <line x1="50" y1="58" x2="50" y2="64"/>
+            </svg>
+          </div>
+          <div class="activity-info">
+            <span class="activity-tag">Weekly</span>
+            <h3>Build Sessions</h3>
+            <p>Live co-working sessions. Build in public, share progress, get feedback from peers and mentors.</p>
+          </div>
+        </div>
+        <div class="activity-card reveal">
+          <div class="activity-visual tile-pink">
+            <svg viewBox="0 0 100 100" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="50,10 38,38 8,42 28,62 24,92 50,78 76,92 72,62 92,42 62,38"/>
+              <polygon points="50,30 45,46 30,48 40,58 38,72 50,64 62,72 60,58 70,48 55,46"/>
+            </svg>
+          </div>
+          <div class="activity-info">
+            <span class="activity-tag">Monthly</span>
+            <h3>Hackathons</h3>
+            <p>Themed hackathons with prizes, mentorship, and visibility. Build fast, win big, get noticed.</p>
+          </div>
+        </div>
+        <div class="activity-card reveal">
+          <div class="activity-visual tile-blue">
+            <svg viewBox="0 0 100 100" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M26 74V38C26 28 36 20 50 20C64 20 74 28 74 38V74"/>
+              <line x1="18" y1="74" x2="82" y2="74"/>
+              <circle cx="50" cy="46" r="8"/>
+              <line x1="50" y1="54" x2="50" y2="66"/>
+              <line x1="38" y1="60" x2="62" y2="60"/>
+            </svg>
+          </div>
+          <div class="activity-info">
+            <span class="activity-tag">Biweekly</span>
+            <h3>Expert Office Hours</h3>
+            <p>1-on-1 sessions with AI engineers, product leaders, and founders who've scaled AI products.</p>
+          </div>
+        </div>
+        <div class="activity-card reveal">
+          <div class="activity-visual tile-orange">
+            <svg viewBox="0 0 100 100" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="20" y="18" width="60" height="50" rx="4"/>
+              <line x1="20" y1="32" x2="80" y2="32"/>
+              <path d="M34 46H66"/><path d="M34 56H54"/>
+              <line x1="20" y1="68" x2="80" y2="68"/>
+              <path d="M40 68V82"/><path d="M60 68V82"/>
+              <path d="M30 82H70"/>
+            </svg>
+          </div>
+          <div class="activity-info">
+            <span class="activity-tag">Always Open</span>
+            <h3>Prompt Lab & Starter Kits</h3>
+            <p>Curated prompts, open-source templates for chatbots, agents, RAG pipelines. Ship in hours.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── UPDATES ───────── -->
+  <section class="updates" id="updates">
+    <div class="container">
+      <h2 class="section-title reveal">Latest updates</h2>
+      <div class="updates-grid">
+        <a href="#join" class="update-card reveal">
+          <div class="update-top">
+            <div class="update-header">
+              <span class="update-club"><strong>Claude</strong> Builder Club</span>
+              <span class="update-badge">Update</span>
+            </div>
+            <span class="update-campus">@iit-madras</span>
+          </div>
+          <div class="update-illust tile-olive">
+            <svg viewBox="0 0 120 90" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="20" y="10" width="40" height="30" rx="3"/>
+              <path d="M28 24L36 32L28 40"/>
+              <rect x="70" y="20" width="30" height="50" rx="3" fill="none" stroke="#D97757" stroke-width="2"/>
+              <line x1="76" y1="36" x2="94" y2="36" stroke="#D97757"/>
+              <line x1="76" y1="44" x2="88" y2="44" stroke="#D97757"/>
+            </svg>
+          </div>
+          <h3>Join us for tech talks<br>every Tuesday</h3>
+          <p class="update-desc">A 48-hour collaborative coding event where teams build innovative AI-powered solutions.</p>
+        </a>
+        <a href="#join" class="update-card reveal">
+          <div class="update-top">
+            <div class="update-header">
+              <span class="update-club"><strong>Claude</strong> Builder Club</span>
+              <span class="update-badge badge-announce">Announcement</span>
+            </div>
+            <span class="update-campus">@iit-madras</span>
+          </div>
+          <div class="update-illust tile-orange">
+            <svg viewBox="0 0 120 90" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="60" cy="45" rx="28" ry="28"/>
+              <path d="M42 35C42 35 46 58 60 58C74 58 78 35 78 35" fill="none"/>
+              <line x1="60" y1="17" x2="60" y2="28"/><line x1="38" y1="24" x2="44" y2="33"/>
+              <line x1="82" y1="24" x2="76" y2="33"/><line x1="32" y1="45" x2="42" y2="45"/>
+              <line x1="78" y1="45" x2="88" y2="45"/>
+            </svg>
+          </div>
+          <h3>Claude creator<br>championship</h3>
+          <p class="update-desc">Build the most impressive Claude-powered app — prizes and bragging rights.</p>
+        </a>
+        <a href="#join" class="update-card reveal">
+          <div class="update-top">
+            <div class="update-header">
+              <span class="update-club"><strong>Claude</strong> Builder Club</span>
+              <span class="update-badge">Event</span>
+            </div>
+            <span class="update-campus">@iit-madras</span>
+          </div>
+          <div class="update-illust tile-pink">
+            <svg viewBox="0 0 120 90" fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="60" cy="45" r="30"/>
+              <circle cx="48" cy="36" r="4" fill="#1A1A1A" stroke="none"/>
+              <circle cx="72" cy="36" r="4" fill="#1A1A1A" stroke="none"/>
+              <circle cx="42" cy="54" r="3" fill="#1A1A1A" stroke="none"/>
+              <circle cx="78" cy="54" r="3" fill="#1A1A1A" stroke="none"/>
+              <circle cx="60" cy="62" r="3" fill="#1A1A1A" stroke="none"/>
+              <line x1="48" y1="36" x2="72" y2="36"/>
+              <line x1="48" y1="36" x2="42" y2="54"/>
+              <line x1="72" y1="36" x2="78" y2="54"/>
+              <line x1="42" y1="54" x2="60" y2="62"/>
+              <line x1="78" y1="54" x2="60" y2="62"/>
+              <path d="M30 45L12 45"/><path d="M90 45L108 45"/>
+              <path d="M60 15L60 6"/><path d="M38 20L30 10"/><path d="M82 20L90 10"/>
+            </svg>
+          </div>
+          <h3>Open source<br>Claude projects</h3>
+          <p class="update-desc">Contribute to community-built tools and templates. Sign up and start building.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── JOIN CTA ───────── -->
+  <section class="join" id="join">
+    <div class="container">
+      <div class="join-card reveal">
+        <h2>Ready to build?</h2>
+        <p>Join the Claude Builder Club at IIT Madras — express your interest and we'll get you onboarded.</p>
+        <div class="join-actions">
+          <a href="https://www.jotform.com/253555944387168" target="_blank" class="btn btn-white">Express Interest</a>
+          <a href="https://www.jotform.com/253566966596075" target="_blank" class="btn btn-white-outline">Member Check-In</a>
+        </div>
+        <svg class="join-sun" width="56" height="56" viewBox="0 0 70 70" fill="none">
+          <path d="M35 0 L35 15" stroke="rgba(255,255,255,.2)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M35 55 L35 70" stroke="rgba(255,255,255,.2)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M0 35 L15 35" stroke="rgba(255,255,255,.2)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M55 35 L70 35" stroke="rgba(255,255,255,.2)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M10.25 10.25 L20.8 20.8" stroke="rgba(255,255,255,.2)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M49.2 49.2 L59.75 59.75" stroke="rgba(255,255,255,.2)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M59.75 10.25 L49.2 20.8" stroke="rgba(255,255,255,.2)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M20.8 49.2 L10.25 59.75" stroke="rgba(255,255,255,.2)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M17.5 3.5 L24 17" stroke="rgba(255,255,255,.15)" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M46 53 L52.5 66.5" stroke="rgba(255,255,255,.15)" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M52.5 3.5 L46 17" stroke="rgba(255,255,255,.15)" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M24 53 L17.5 66.5" stroke="rgba(255,255,255,.15)" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M3.5 17.5 L17 24" stroke="rgba(255,255,255,.15)" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M53 46 L66.5 52.5" stroke="rgba(255,255,255,.15)" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M3.5 52.5 L17 46" stroke="rgba(255,255,255,.15)" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M53 24 L66.5 17.5" stroke="rgba(255,255,255,.15)" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="35" cy="35" r="4" fill="rgba(255,255,255,.25)"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── FOOTER ───────── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <img src="claude_logo.jpg" alt="Claude" class="footer-logo-img" />
+            <span class="logo-text">Builder Club</span>
+          </a>
+          <p>The AI builder community at IIT Madras.</p>
+        </div>
+        <div class="footer-cols">
+          <div class="footer-col">
+            <h4>Club</h4>
+            <a href="#about">About</a>
+            <a href="#activities">Activities</a>
+            <a href="#updates">Updates</a>
+          </div>
+          <div class="footer-col">
+            <h4>Join</h4>
+            <a href="https://www.jotform.com/253555944387168" target="_blank">Interest Form</a>
+            <a href="https://www.jotform.com/253566966596075" target="_blank">Check In</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>Copyright Claude Builder Club &copy; 2026.</span>
+        <span>IIT Madras &middot; Built with Claude</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
