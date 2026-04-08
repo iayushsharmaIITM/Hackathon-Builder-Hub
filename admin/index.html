@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Claude Builder Club</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="admin.css" />
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body class="admin-body">
+
+  <!-- ───────── NAVBAR ───────── -->
+  <nav class="navbar scrolled">
+    <div class="nav-inner" style="justify-content: space-between;">
+      <a href="../" class="logo">
+        <img src="../claude_logo.jpg" alt="Claude" class="claude-logo-img" />
+        <span class="logo-text">Builder Hub Admin</span>
+      </a>
+      <div class="nav-actions">
+        <button class="btn btn-outline" id="logoutBtn" style="display: none; padding: 0.5rem 1rem;">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ───────── LOGIN VIEW ───────── -->
+  <main id="loginView" class="admin-view active">
+    <div class="admin-card login-card">
+      <div class="card-header">
+        <h2 class="card-title">Admin Access</h2>
+        <p class="card-desc">Sign in with an authorized admin email.</p>
+      </div>
+      <form id="adminLoginForm">
+        <div class="form-group">
+          <label for="adminEmail" class="form-label">Email Address</label>
+          <input type="email" id="adminEmail" class="form-input" placeholder="admin@claude.com" required />
+        </div>
+        <div class="form-group">
+          <label for="adminPassword" class="form-label">Password</label>
+          <input type="password" id="adminPassword" class="form-input" placeholder="••••••••" required />
+        </div>
+        <div id="loginMessage" style="font-size: 0.9rem; margin-bottom: 16px; display: none;"></div>
+        <button type="submit" class="btn btn-dark" id="loginSubmitBtn">Log In</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- ───────── DASHBOARD VIEW ───────── -->
+  <main id="dashboardView" class="admin-view">
+    
+    <aside class="admin-sidebar" id="sidebar">
+      <button class="tab-btn active" data-tab="projects">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        Manage Projects
+      </button>
+      <button class="tab-btn" data-tab="emails">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        Manage Users
+      </button>
+    </aside>
+
+    <div class="admin-content">
+      
+      <!-- SUBMISSIONS TAB -->
+      <section id="tab-projects" class="tab-pane active">
+        <div class="pane-header">
+          <h2>Submitted Builds</h2>
+        </div>
+        <div class="admin-list" id="projectsList">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <section id="tab-emails" class="tab-pane">
+        <div class="pane-header">
+          <h2>Authorized Users</h2>
+          <div class="pane-actions" style="align-items: center;">
+            <select id="csvRoleSelect" class="form-input" style="width: auto; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+              <option value="ambassador">Import as Ambassadors</option>
+              <option value="admin">Import as Admins</option>
+            </select>
+            <label class="btn btn-dark" style="cursor: pointer;">
+              Upload CSV
+              <input type="file" id="csvFileInput" accept=".csv" style="display: none;" />
+            </label>
+            <button class="btn btn-outline" id="downloadTemplateBtn">CSV Template</button>
+            <button class="btn btn-dark" id="addSingleEmailBtn">Add Email</button>
+          </div>
+        </div>
+
+        <form id="addEmailForm" style="display: none; margin-bottom: 24px; padding: 16px; background: rgba(0,0,0,0.03); border-radius: 8px;">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label">Add New User</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="email" id="newAdminEmail" class="form-input" placeholder="user@claude.com" required style="flex: 1;" />
+              <select id="newUserRole" class="form-input" style="width: auto;">
+                <option value="ambassador">Ambassador</option>
+                <option value="admin">Admin</option>
+              </select>
+              <button type="submit" class="btn btn-dark">Add</button>
+              <button type="button" class="btn btn-outline" id="cancelAddEmailBtn">Cancel</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="admin-list" id="emailsList">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>

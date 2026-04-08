@@ -110,6 +110,7 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_
 
 // ── Auth & Modal State ──
 let intendedAction = null;
+let currentBuilderEmail = localStorage.getItem('cbc_builder_email') || null;
 
 // ── Auth Modal (Magic Link Verification) ──
 const loginModal = document.getElementById('loginModal');
@@ -134,25 +135,35 @@ loginModal.addEventListener('click', (e) => { if (e.target === loginModal) close
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   loginError.style.display = 'none';
-  const email = document.getElementById('adminEmail').value;
+  const email = document.getElementById('adminEmail').value.trim();
   
-  loginSubmitBtn.textContent = 'Sending Magic Link...';
+  loginSubmitBtn.textContent = 'Verifying...';
   loginSubmitBtn.disabled = true;
 
-  const { error } = await supabaseClient.auth.signInWithOtp({ email });
+  // Query authorized_emails
+  const { data, error } = await supabaseClient
+    .from('authorized_emails')
+    .select('role')
+    .eq('email', email)
+    .single();
 
   loginSubmitBtn.disabled = false;
-  loginSubmitBtn.textContent = 'Send Magic Link';
+  loginSubmitBtn.textContent = 'Verify Access';
 
-  if (error) {
-    loginError.textContent = error.message;
+  if (!data || (data.role !== 'admin' && data.role !== 'ambassador')) {
+    loginError.textContent = 'Access Denied: Email not authorized to submit builds.';
     loginError.style.display = 'block';
     loginError.style.color = '#D32F2F';
   } else {
-    loginError.textContent = 'Check your email for the magic link!';
-    loginError.style.display = 'block';
-    loginError.style.color = '#788C5D';
+    // Access granted
+    currentBuilderEmail = email;
+    localStorage.setItem('cbc_builder_email', email);
+    loginError.style.display = 'none';
     loginForm.reset();
+    closeLoginModal();
+    
+    // Automatically open submit modal because they just passed verification
+    openSubmitModalOriginal();
   }
 });
 
@@ -162,12 +173,27 @@ const closeModalBtn = document.getElementById('closeSubmitModal');
 
 async function openSubmitModal(e) {
   if (e) e.preventDefault();
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  if (!session) {
+  
+  if (!currentBuilderEmail) {
     intendedAction = 'submit';
     openLoginModal();
     return;
   }
+  
+  // Re-verify user role before opening submit modal as extra precaution
+  const { data, error } = await supabaseClient
+    .from('authorized_emails')
+    .select('role')
+    .eq('email', currentBuilderEmail)
+    .single();
+
+  if (!data || (data.role !== 'admin' && data.role !== 'ambassador')) {
+    alert("Access Denied: Your email is not authorized to submit builds. Please use an authorized email.");
+    currentBuilderEmail = null;
+    localStorage.removeItem('cbc_builder_email');
+    return;
+  }
+  
   openSubmitModalOriginal();
 }
 function openSubmitModalOriginal() {
@@ -184,43 +210,7 @@ submitModal.addEventListener('click', (e) => { if (e.target === submitModal) clo
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && submitModal.classList.contains('active')) closeSubmitModal(); });
 document.querySelectorAll('.open-submit-modal').forEach((el) => { el.addEventListener('click', openSubmitModal); });
 
-// ── Admin Modal ──
-const adminModal = document.getElementById('adminModal');
-const closeAdminBtn = document.getElementById('closeAdminModal');
-const openAdminBtn = document.getElementById('openAdminModal');
-const adminList = document.getElementById('adminList');
-let editingProjectId = null;
-
-async function openAdminModal(e) {
-  if (e) e.preventDefault();
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  if (!session) {
-    intendedAction = 'admin';
-    openLoginModal();
-    return;
-  }
-  openAdminModalOriginal();
-}
-function openAdminModalOriginal() {
-  adminModal.classList.add('active');
-  document.body.style.overflow = 'hidden';
-  renderAdminProjects();
-}
-function closeAdminModal() {
-  adminModal.classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-if (openAdminBtn) openAdminBtn.addEventListener('click', openAdminModal);
-if (closeAdminBtn) closeAdminBtn.addEventListener('click', closeAdminModal);
-adminModal.addEventListener('click', (e) => { if (e.target === adminModal) closeAdminModal(); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && adminModal.classList.contains('active')) closeAdminModal(); });
-
-// ── Global Auth Listener ──
-supabaseClient.auth.onAuthStateChange((event, session) => {
-  // If session logic is needed later, handle it here.
-  // For now, magic link auth retains the session globally.
-});
+// Admin modal logic moved to /admin/admin.js
 
 
 // ── Database Fetching ──
@@ -228,12 +218,12 @@ async function fetchProjects() {
   const { data, error } = await supabaseClient
     .from('submissions')
     .select('*')
+    .eq('approved', true)
     .order('created_at', { ascending: false });
     
   if (!error && data) {
     projects = data;
     renderProjects();
-    renderAdminProjects();
   }
 }
 
@@ -275,7 +265,12 @@ function createProjectCard(project, index) {
   if (project.artifactUrl) actions.push(`<a href="${escapeHtml(project.artifactUrl)}" target="_blank" rel="noopener" class="card-action-btn">View Artifact</a>`);
   if (actions.length === 0) actions.push(`<span class="card-action-btn" style="opacity:.5;cursor:default;">No links provided</span>`);
 
-  const tagsHtml = (project.tags || []).map((tag, i) => {
+  let safeTags = project.tags || [];
+  if (typeof safeTags === 'string') {
+    try { safeTags = JSON.parse(safeTags); } catch(e) { safeTags = [safeTags]; }
+  }
+
+  const tagsHtml = safeTags.map((tag, i) => {
     return `<span class="card-tag ${TAG_COLORS[i % TAG_COLORS.length]}">${escapeHtml(tag)}</span>`;
   }).join('');
 
@@ -294,14 +289,19 @@ function createProjectCard(project, index) {
 
 function renderProjects() {
   const filtered = projects.filter((p) => {
-    const matchesCat = activeCategory === 'all' || (p.tags || []).includes(activeCategory);
+    let pTags = p.tags || [];
+    if (typeof pTags === 'string') {
+      try { pTags = JSON.parse(pTags); } catch(e) { pTags = [pTags]; }
+    }
+
+    const matchesCat = activeCategory === 'all' || pTags.includes(activeCategory);
     const q = searchQuery.toLowerCase();
     const matchesSearch = !q ||
       (p.name || '').toLowerCase().includes(q) ||
       (p.builder || '').toLowerCase().includes(q) ||
       (p.school || '').toLowerCase().includes(q) ||
       (p.description || '').toLowerCase().includes(q) ||
-      (p.tags || []).some(t => t.toLowerCase().includes(q));
+      pTags.some(t => t.toLowerCase().includes(q));
     return matchesCat && matchesSearch;
   });
 
@@ -465,82 +465,7 @@ function showToast() {
   }, 3000);
 }
 
-// ── Admin Functions ──
-function renderAdminProjects() {
-  if (!adminList) return;
-  
-  if (projects.length === 0) {
-    adminList.innerHTML = '<p style="color: var(--text-light); padding: 16px;">No projects submitted yet.</p>';
-    return;
-  }
-
-  adminList.innerHTML = projects.map(p => `
-    <div class="admin-item">
-      <div class="admin-item-info">
-        <div class="admin-item-title">${escapeHtml(p.name)}</div>
-        <div class="admin-item-meta">${escapeHtml(p.builder)} · ${escapeHtml(p.school)}</div>
-      </div>
-      <div class="admin-item-actions">
-        <button class="btn-admin-edit" onclick="editProject(${p.id})">Edit</button>
-        <button class="btn-admin-delete" onclick="deleteProject(${p.id})">Delete</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-window.deleteProject = async function(id) {
-  if (!confirm('Are you sure you want to delete this build?')) return;
-  const { error } = await supabaseClient.from('submissions').delete().eq('id', id);
-  if (error) {
-    alert('Failed to delete. Ensure you are logged in as admin.');
-    console.error(error);
-  } else {
-    await fetchProjects();
-  }
-};
-
-window.editProject = function(id) {
-  const p = projects.find(pro => pro.id === id);
-  if (!p) return;
-  
-  editingProjectId = p.id;
-  
-  // Close admin, open submit
-  closeAdminModal();
-  openSubmitModal();
-  document.querySelector('#submitModal .modal-title').textContent = 'Edit Your Build';
-  
-  // Populate form
-  document.getElementById('projectName').value = p.name;
-  document.getElementById('builderName').value = p.builder;
-  document.getElementById('schoolSelect').value = p.school;
-  document.getElementById('githubUrl').value = p.githubUrl || '';
-  document.getElementById('websiteUrl').value = p.websiteUrl || '';
-  document.getElementById('artifactUrl').value = p.artifactUrl || '';
-  document.getElementById('videoUrl').value = p.videoUrl || '';
-  description.value = p.description;
-  
-  // Tags
-  selectedTags.clear();
-  tagOptions.querySelectorAll('.tag-btn').forEach(btn => {
-    btn.classList.remove('selected');
-    if (p.tags && p.tags.includes(btn.dataset.tag)) {
-      selectedTags.add(btn.dataset.tag);
-      btn.classList.add('selected');
-    }
-  });
-  
-  // Update character count
-  charCount.textContent = `${p.description.length}/250`;
-  const remaining = 50 - p.description.length;
-  if (remaining > 0) {
-    charHint.textContent = `${remaining} more characters needed`;
-    charHint.style.color = '';
-  } else {
-    charHint.textContent = '✓ Minimum reached';
-    charHint.style.color = '#788C5D';
-  }
-};
+// Admin CRUD functions moved to /admin/admin.js
 
 // ── Init ──
 fetchProjects();

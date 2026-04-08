@@ -1,0 +1,255 @@
+/* Admin specific styles */
+
+.admin-body {
+  background-color: var(--bg-alt);
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 80px; /* space for navbar */
+}
+
+/* Views */
+.admin-view {
+  display: none;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  flex: 1;
+}
+
+.admin-view.active {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Login Card */
+#loginView {
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.card-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-desc {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+/* Dashboard Layout */
+#dashboardView {
+  flex-direction: row;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.admin-sidebar {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  color: var(--text-light);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  background: rgba(0,0,0,0.03);
+  color: var(--text);
+}
+
+.tab-btn.active {
+  background: var(--bg-card);
+  color: var(--text);
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+[data-theme="dark"] .tab-btn:hover {
+  background: rgba(255,255,255,0.05);
+}
+[data-theme="dark"] .tab-btn.active {
+  background: rgba(255,255,255,0.05);
+}
+
+.admin-content {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  min-height: 60vh;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+.pane-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+}
+
+.pane-header h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.pane-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Lists */
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  transition: border-color 0.2s;
+}
+
+.admin-item:hover {
+  border-color: rgba(0,0,0,0.2);
+}
+
+[data-theme="dark"] .admin-item:hover {
+  border-color: rgba(255,255,255,0.2);
+}
+
+.admin-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-item-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.admin-item-meta {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.admin-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-admin-edit,
+.btn-admin-delete {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-admin-edit {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-admin-edit:hover {
+  background: var(--bg-alt);
+}
+
+.btn-admin-delete {
+  background: #FFF0F0;
+  border: 1px solid #FFCDCD;
+  color: #D32F2F;
+}
+
+.btn-admin-delete:hover {
+  background: #FFE0E0;
+}
+
+[data-theme="dark"] .btn-admin-delete {
+  background: rgba(211,47,47,0.1);
+  border-color: rgba(211,47,47,0.3);
+  color: #FF6666;
+}
+[data-theme="dark"] .btn-admin-delete:hover {
+  background: rgba(211,47,47,0.2);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  #dashboardView {
+    flex-direction: column;
+  }
+  .admin-sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .tab-btn {
+    white-space: nowrap;
+  }
+  .pane-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
