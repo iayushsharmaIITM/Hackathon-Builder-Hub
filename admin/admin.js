@@ -257,27 +257,55 @@ addSingleEmailBtn.addEventListener('click', () => {
 cancelAddEmailBtn.addEventListener('click', () => {
   addEmailForm.style.display = 'none';
   addEmailForm.reset();
+  document.getElementById('newAdminPassword').style.display = 'none';
+});
+
+document.getElementById('newUserRole').addEventListener('change', (e) => {
+  const passEl = document.getElementById('newAdminPassword');
+  if (e.target.value === 'admin') {
+    passEl.style.display = 'block';
+    passEl.required = true;
+  } else {
+    passEl.style.display = 'none';
+    passEl.required = false;
+    passEl.value = '';
+  }
 });
 
 addEmailForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('newAdminEmail').value.trim();
   const role = document.getElementById('newUserRole').value;
+  const password = document.getElementById('newAdminPassword').value;
   if (!email) return;
 
   const btn = addEmailForm.querySelector('button[type="submit"]');
   btn.textContent = 'Adding...';
   btn.disabled = true;
 
+  if (role === 'admin') {
+    if (!password) {
+      alert("You must define a password when creating an Admin.");
+      btn.textContent = 'Add'; btn.disabled = false; return;
+    }
+    const { error: authError } = await supabaseClient.auth.signUp({ email, password });
+    if (authError) {
+      alert('Error registering Supabase Auth Password: ' + authError.message);
+      btn.textContent = 'Add'; btn.disabled = false; return;
+    }
+  }
+
   const { error } = await supabaseClient.from('authorized_emails').insert([{ email, role }]);
   
-  btn.textContent = 'Add';
-  btn.disabled = false;
-
   if (error) {
-    alert('Failed to add email: ' + error.message);
+    alert('Failed to add email reference: ' + error.message);
+    btn.textContent = 'Add';
+    btn.disabled = false;
   } else {
+    btn.textContent = 'Add';
+    btn.disabled = false;
     addEmailForm.reset();
+    document.getElementById('newAdminPassword').style.display = 'none';
     addEmailForm.style.display = 'none';
     loadEmails();
   }
