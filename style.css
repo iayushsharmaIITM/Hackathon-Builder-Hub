@@ -238,7 +238,7 @@ strong { font-weight: 700; }
   border: 2px solid var(--card-border); background: transparent;
   color: var(--text); cursor: pointer;
   transition: all .3s cubic-bezier(.4,0,.2,1); font-family: var(--font);
-  display: inline-flex; align-items: center;
+  display: inline-flex; align-items: center; white-space: nowrap;
 }
 .btn-nav:hover { background: rgba(217,119,87,.06); border-color: var(--orange); color: var(--orange); }
 .btn-nav-dark {
