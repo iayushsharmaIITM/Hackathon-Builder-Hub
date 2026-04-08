@@ -3,6 +3,28 @@ const SUPABASE_URL = 'https://ulpiksmbqrkgphgfhlwz.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVscGlrc21icXJrZ3BoZ2ZobHd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyMzk4OTgsImV4cCI6MjA5MDgxNTg5OH0.NqwgvqFOUvToS7QHU7JZb4v6z0FXivaCNQ1cQ6l0s80';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// ── Dark / Light Mode Toggle ──
+(function initTheme() {
+  const toggle = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('cbc-theme');
+
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const next = isDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('cbc-theme', next);
+
+      toggle.style.transform = 'rotate(180deg) scale(1.15)';
+      setTimeout(() => { toggle.style.transform = ''; }, 350);
+    });
+  }
+})();
+
 // ── DOM Elements ──
 const loginView = document.getElementById('loginView');
 const dashboardView = document.getElementById('dashboardView');

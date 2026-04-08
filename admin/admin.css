@@ -1,7 +1,7 @@
 /* Admin specific styles */
 
 .admin-body {
-  background-color: var(--bg-alt);
+  background-color: var(--bg);
   min-height: 100vh;
   margin: 0;
   display: flex;
@@ -31,8 +31,8 @@
 }
 
 .admin-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 12px;
   padding: 2rem;
   width: 100%;
@@ -107,8 +107,8 @@
 
 .admin-content {
   flex: 1;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 12px;
   padding: 2rem;
   min-height: 60vh;
@@ -155,7 +155,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--card-border);
   border-radius: 8px;
   background: var(--bg);
   transition: border-color 0.2s;
