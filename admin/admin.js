@@ -71,6 +71,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
   } else if (event === 'SIGNED_OUT') {
     isAdmin = false;
     userEmail = null;
+    localStorage.removeItem('cbc_builder_email');
     showLogin();
   }
 });
