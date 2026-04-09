@@ -140,6 +140,7 @@ loginForm.addEventListener('submit', async (e) => {
 });
 
 logoutBtn.addEventListener('click', async () => {
+  localStorage.removeItem('cbc_builder_email');
   await supabaseClient.auth.signOut();
 });
 
