@@ -493,5 +493,23 @@ function showToast() {
 
 // Admin CRUD functions moved to /admin/admin.js
 
+// ── Admin Session Check ──
+async function checkAdminSession() {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (session && session.user) {
+    const { data } = await supabaseClient
+      .from('authorized_emails')
+      .select('role')
+      .eq('email', session.user.email)
+      .single();
+      
+    if (data && data.role === 'admin') {
+      const adminBtn = document.getElementById('adminLoginBtn');
+      if (adminBtn) adminBtn.textContent = 'Admin Hub';
+    }
+  }
+}
+
 // ── Init ──
+checkAdminSession();
 fetchProjects();
