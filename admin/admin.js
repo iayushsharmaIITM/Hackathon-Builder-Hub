@@ -38,6 +38,7 @@ const tabPanes = document.querySelectorAll('.tab-pane');
 
 const projectsList = document.getElementById('projectsList');
 const emailsList = document.getElementById('emailsList');
+const logsList = document.getElementById('logsList');
 
 const csvFileInput = document.getElementById('csvFileInput');
 const downloadTemplateBtn = document.getElementById('downloadTemplateBtn');
@@ -106,6 +107,7 @@ function showDashboard() {
   logoutBtn.style.display = 'block';
   loadProjects();
   loadEmails();
+  loadLogs();
 }
 
 // ── Login Flow ──
@@ -150,6 +152,51 @@ tabBtns.forEach(btn => {
   });
 });
 
+// ── Audit Logs ──
+async function logAdminAction(actionText) {
+  if (!userEmail) return;
+  const { error } = await supabaseClient.from('admin_logs').insert([{
+    action: actionText,
+    performed_by: userEmail
+  }]);
+  if (error) console.error("Logging failed:", error);
+  else loadLogs();
+}
+
+async function loadLogs() {
+  if (!logsList) return;
+  const { data, error } = await supabaseClient
+    .from('admin_logs')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    logsList.innerHTML = `<p style="color:red">Failed to load logs: ${error.message}</p>`;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    logsList.innerHTML = '<p style="color:var(--text-light); padding: 1rem;">No auditable actions found.</p>';
+    return;
+  }
+
+  logsList.innerHTML = data.map(log => {
+      const date = new Date(log.created_at).toLocaleString();
+      return `
+        <div class="admin-item" style="padding: 12px 16px;">
+          <div class="admin-item-info">
+            <div class="admin-item-title" style="font-size: 0.95rem; font-weight: 500;">
+              ${escapeHtml(log.action)}
+            </div>
+            <div class="admin-item-meta" style="font-size: 0.8rem; margin-top: 4px;">
+              By: ${escapeHtml(log.performed_by)} &middot; ${date}
+            </div>
+          </div>
+        </div>
+      `;
+  }).join('');
+}
+
 // ── Data Fetching & Rendering ──
 function escapeHtml(str) {
   const div = document.createElement('div');
@@ -185,23 +232,27 @@ async function loadProjects() {
         <div class="admin-item-meta">${escapeHtml(p.builder)} · ${escapeHtml(p.school)}</div>
       </div>
       <div class="admin-item-actions">
-        <button class="btn-admin" style="font-size: 0.8rem; padding: 4px 10px; margin-right: 8px; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; background: transparent; color: var(--text);" onclick="toggleApproval(${p.id}, ${!!p.approved})">
+        <button class="btn-admin" style="font-size: 0.8rem; padding: 4px 10px; margin-right: 8px; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; background: transparent; color: var(--text);" onclick="toggleApproval(${p.id}, ${!!p.approved}, '${escapeHtml(p.name).replace(/'/g, "\\'")}')">
           ${p.approved ? 'Hide' : 'Approve'}
         </button>
-        <button class="btn-admin-delete" onclick="deleteProject(${p.id})">Delete</button>
+        <button class="btn-admin-delete" onclick="deleteProject(${p.id}, '${escapeHtml(p.name).replace(/'/g, "\\'")}')">Delete</button>
       </div>
     </div>
   `).join('');
 }
 
-window.deleteProject = async function(id) {
+window.deleteProject = async function(id, name) {
   if (!confirm('Are you sure you want to delete this project? This will remove it from the showcase.')) return;
   const { error } = await supabaseClient.from('submissions').delete().eq('id', id);
-  if (error) alert('Failed to delete project: ' + error.message);
-  else loadProjects();
+  if (error) {
+    alert('Failed to delete project: ' + error.message);
+  } else {
+    logAdminAction(`Project "${name}" deleted.`);
+    loadProjects();
+  }
 };
 
-window.toggleApproval = async function(id, isApproved) {
+window.toggleApproval = async function(id, isApproved, name) {
   const newStatus = !isApproved;
   const { error } = await supabaseClient
     .from('submissions')
@@ -211,6 +262,7 @@ window.toggleApproval = async function(id, isApproved) {
   if (error) {
     alert('Failed to update project status: ' + error.message);
   } else {
+    logAdminAction(`Project "${name}" ${newStatus ? 'approved' : 'hidden'}.`);
     loadProjects();
   }
 };
@@ -261,7 +313,7 @@ function renderEmails() {
         <div class="admin-item-meta">Role: ${escapeHtml(e.role || 'admin')}</div>
       </div>
       <div class="admin-item-actions">
-        ${e.email !== userEmail ? `<button class="btn-admin-delete" onclick="deleteEmail('${e.id}')">Remove</button>` : '<span style="font-size:0.8rem; color:var(--text-light); padding:6px;">Current User</span>'}
+        ${e.email !== userEmail ? `<button class="btn-admin-delete" onclick="deleteEmail('${e.id}', '${escapeHtml(e.email)}')">Remove</button>` : '<span style="font-size:0.8rem; color:var(--text-light); padding:6px;">Current User</span>'}
       </div>
     </div>
   `;
@@ -281,11 +333,15 @@ function renderEmails() {
   emailsList.innerHTML = html;
 }
 
-window.deleteEmail = async function(id) {
+window.deleteEmail = async function(id, emailTarget) {
   if (!confirm('Remove this email from authorized admins?')) return;
   const { error } = await supabaseClient.from('authorized_emails').delete().eq('id', id);
-  if (error) alert('Failed to remove email: ' + error.message);
-  else loadEmails();
+  if (error) {
+    alert('Failed to remove email: ' + error.message);
+  } else {
+    logAdminAction(`${emailTarget} was removed.`);
+    loadEmails();
+  }
 };
 
 // ── Email Management ──
@@ -350,6 +406,7 @@ addEmailForm.addEventListener('submit', async (e) => {
     btn.textContent = 'Add';
     btn.disabled = false;
   } else {
+    logAdminAction(`${email} was added as an ${role}.`);
     btn.textContent = 'Add';
     btn.disabled = false;
     addEmailForm.reset();
@@ -417,6 +474,7 @@ csvFileInput.addEventListener('change', (e) => {
     if (error) {
         alert('Failed to upload CSV: ' + error.message);
     } else {
+        logAdminAction(`Batch uploaded ${emailsToInsert.length} users via CSV.`);
         alert(`Successfully uploaded ${emailsToInsert.length} emails!`);
         loadEmails();
     }
