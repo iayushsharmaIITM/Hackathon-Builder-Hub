@@ -507,6 +507,11 @@ async function checkAdminSession() {
       const adminBtn = document.getElementById('adminLoginBtn');
       if (adminBtn) adminBtn.textContent = 'Admin Hub';
     }
+    
+    if (data && (data.role === 'admin' || data.role === 'ambassador')) {
+      currentBuilderEmail = session.user.email;
+      localStorage.setItem('cbc_builder_email', session.user.email);
+    }
   }
 }
 
