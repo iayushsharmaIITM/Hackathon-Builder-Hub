@@ -44,6 +44,8 @@ const downloadTemplateBtn = document.getElementById('downloadTemplateBtn');
 const addSingleEmailBtn = document.getElementById('addSingleEmailBtn');
 const cancelAddEmailBtn = document.getElementById('cancelAddEmailBtn');
 const addEmailForm = document.getElementById('addEmailForm');
+const searchUserEmail = document.getElementById('searchUserEmail');
+const filterUserRole = document.getElementById('filterUserRole');
 
 // ── State ──
 let isAdmin = false;
@@ -213,6 +215,8 @@ window.toggleApproval = async function(id, isApproved) {
   }
 };
 
+let allEmailsData = [];
+
 async function loadEmails() {
   const { data, error } = await supabaseClient
     .from('authorized_emails')
@@ -224,12 +228,33 @@ async function loadEmails() {
     return;
   }
 
-  if (!data || data.length === 0) {
-    emailsList.innerHTML = '<p style="color:var(--text-light); padding: 1rem;">No authorized emails found. (Add one!)</p>';
+  allEmailsData = data || [];
+  renderEmails();
+}
+
+function renderEmails() {
+  const searchEl = document.getElementById('searchUserEmail');
+  const filterEl = document.getElementById('filterUserRole');
+  
+  const query = searchEl ? searchEl.value.toLowerCase().trim() : '';
+  const filterRole = filterEl ? filterEl.value : 'all';
+  
+  const filteredData = allEmailsData.filter(e => {
+    const matchesQuery = e.email.toLowerCase().includes(query);
+    const role = e.role || 'admin';
+    const matchesFilter = filterRole === 'all' || role === filterRole;
+    return matchesQuery && matchesFilter;
+  });
+
+  if (filteredData.length === 0) {
+    emailsList.innerHTML = '<p style="color:var(--text-light); padding: 1rem;">No matching authorized emails found.</p>';
     return;
   }
 
-  emailsList.innerHTML = data.map(e => `
+  const admins = filteredData.filter(e => (e.role || 'admin') === 'admin');
+  const ambassadors = filteredData.filter(e => (e.role || 'admin') === 'ambassador');
+
+  const createItem = (e) => `
     <div class="admin-item">
       <div class="admin-item-info">
         <div class="admin-item-title">${escapeHtml(e.email)}</div>
@@ -239,7 +264,21 @@ async function loadEmails() {
         ${e.email !== userEmail ? `<button class="btn-admin-delete" onclick="deleteEmail('${e.id}')">Remove</button>` : '<span style="font-size:0.8rem; color:var(--text-light); padding:6px;">Current User</span>'}
       </div>
     </div>
-  `).join('');
+  `;
+
+  let html = '';
+  
+  if (admins.length > 0) {
+    html += '<h3 style="margin-top: 24px; margin-bottom: 12px; font-size: 1.1rem; color: var(--text);">Admins</h3>';
+    html += admins.map(createItem).join('');
+  }
+  
+  if (ambassadors.length > 0) {
+    html += '<h3 style="margin-top: 24px; margin-bottom: 12px; font-size: 1.1rem; color: var(--text);">Ambassadors</h3>';
+    html += ambassadors.map(createItem).join('');
+  }
+  
+  emailsList.innerHTML = html;
 }
 
 window.deleteEmail = async function(id) {
@@ -250,6 +289,9 @@ window.deleteEmail = async function(id) {
 };
 
 // ── Email Management ──
+if (searchUserEmail) searchUserEmail.addEventListener('input', renderEmails);
+if (filterUserRole) filterUserRole.addEventListener('change', renderEmails);
+
 addSingleEmailBtn.addEventListener('click', () => {
   addEmailForm.style.display = 'block';
   document.getElementById('newAdminEmail').focus();

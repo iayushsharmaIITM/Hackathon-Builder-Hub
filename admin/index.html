@@ -111,6 +111,15 @@
           </div>
         </form>
 
+        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+          <input type="text" id="searchUserEmail" class="form-input" placeholder="Search by email..." style="flex: 1;" />
+          <select id="filterUserRole" class="form-input" style="width: auto;">
+            <option value="all">All Roles</option>
+            <option value="admin">Admins Only</option>
+            <option value="ambassador">Ambassadors Only</option>
+          </select>
+        </div>
+
         <div class="admin-list" id="emailsList">
           <!-- Populated by JS -->
         </div>
