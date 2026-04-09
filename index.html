@@ -272,6 +272,9 @@
       <div class="projects-grid" id="projectsGrid">
         <!-- Rendered by JS -->
       </div>
+      <div style="text-align: center; margin-top: 40px; display: none;" id="loadMoreContainer">
+        <button class="btn btn-outline" id="loadMoreBtn">Load More Builds</button>
+      </div>
       <div class="empty-state" id="emptyState" style="display:none;">
         <div class="empty-icon">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 21l-6-6"/><circle cx="10" cy="10" r="7"/></svg>
@@ -316,93 +319,93 @@
 
         <div class="form-group">
           <label for="schoolSelect" class="form-label">School <span class="required">*</span></label>
-          <select id="schoolSelect" class="form-select" required>
-            <option value="" disabled selected>Select your school</option>
-            <option>African Leadership University Rwanda</option>
-            <option>Arizona State University Campus Immersion</option>
-            <option>Birla Institute of Technology And Science, Pilani-Pilani Campus</option>
-            <option>California Institute of Technology</option>
-            <option>Carnegie Mellon University</option>
-            <option>Champlain College</option>
-            <option>Columbia University in the City of New York</option>
-            <option>Cornell University</option>
-            <option>Dartmouth College</option>
-            <option>Duke University</option>
-            <option>ETH Zurich</option>
-            <option>Georgetown University</option>
-            <option>Georgia Institute of Technology-Main Campus</option>
-            <option>Harvard University</option>
-            <option>Illinois Institute of Technology</option>
-            <option>Imperial College London</option>
-            <option>Indian Institute of Technology Bombay</option>
-            <option>Indian Institute of Technology Delhi</option>
-            <option>Indian Institute of Technology Madras</option>
-            <option>Indiana University-Bloomington</option>
-            <option>Johns Hopkins University</option>
-            <option>Kwame Nkrumah University of Science &amp; Technology</option>
-            <option>London Business School</option>
-            <option>Makerere University</option>
-            <option>Massachusetts Institute of Technology</option>
-            <option>McGill University</option>
-            <option>Michigan State University</option>
-            <option>Mila - Quebec Artificial Intelligence Institute</option>
-            <option>Minnesota State University-Mankato</option>
-            <option>New Jersey Institute of Technology</option>
-            <option>New York University</option>
-            <option>Northeastern University</option>
-            <option>Northumbria University</option>
-            <option>Northwestern University</option>
-            <option>Ohio State University-Main Campus</option>
-            <option>Pennsylvania State University-Main Campus</option>
-            <option>Princeton University</option>
-            <option>Purdue University-Main Campus</option>
-            <option>Rice University</option>
-            <option>Stanford University</option>
-            <option>Syracuse University</option>
-            <option>Technical University of Munich</option>
-            <option>The London School of Economics and Political Science</option>
-            <option>The University of Edinburgh</option>
-            <option>The University of Texas at Austin</option>
-            <option>Trinity College Dublin</option>
-            <option>Universit&#233; Cheikh Anta Diop de Dakar</option>
-            <option>University College Cork</option>
-            <option>University College London</option>
-            <option>University of California-Berkeley</option>
-            <option>University of California-Irvine</option>
-            <option>University of California-Los Angeles</option>
-            <option>University of California-San Diego</option>
-            <option>University of Cambridge</option>
-            <option>University of Cape Town</option>
-            <option>University of Chicago</option>
-            <option>University of Exeter</option>
-            <option>University of Florida</option>
-            <option>University of Georgia</option>
-            <option>University of Ghana</option>
-            <option>University of Illinois Urbana-Champaign</option>
-            <option>University of Lagos</option>
-            <option>University of Louisville</option>
-            <option>University of Maryland-College Park</option>
-            <option>University of Massachusetts-Amherst</option>
-            <option>University of Michigan-Ann Arbor</option>
-            <option>University of Missouri-Columbia</option>
-            <option>University of Nairobi</option>
-            <option>University of Nevada-Las Vegas</option>
-            <option>University of North Carolina at Chapel Hill</option>
-            <option>University of Oxford</option>
-            <option>University of Pennsylvania</option>
-            <option>University of Pittsburgh-Pittsburgh Campus</option>
-            <option>University of Rwanda</option>
-            <option>University of San Francisco</option>
-            <option>University of Southern California</option>
-            <option>University of Toronto St. George</option>
-            <option>University of Victoria</option>
-            <option>University of Virginia-Main Campus</option>
-            <option>University of Washington-Seattle Campus</option>
-            <option>University of Waterloo</option>
-            <option>University of Wisconsin-Madison</option>
-            <option>Vanderbilt University</option>
-            <option>Yale University</option>
-          </select>
+          <input type="text" id="schoolSelect" class="form-input" list="schoolOptions" placeholder="Type or select your school..." required autocomplete="off" />
+          <datalist id="schoolOptions">
+            <option value="African Leadership University Rwanda"></option>
+            <option value="Arizona State University Campus Immersion"></option>
+            <option value="Birla Institute of Technology And Science, Pilani-Pilani Campus"></option>
+            <option value="California Institute of Technology"></option>
+            <option value="Carnegie Mellon University"></option>
+            <option value="Champlain College"></option>
+            <option value="Columbia University in the City of New York"></option>
+            <option value="Cornell University"></option>
+            <option value="Dartmouth College"></option>
+            <option value="Duke University"></option>
+            <option value="ETH Zurich"></option>
+            <option value="Georgetown University"></option>
+            <option value="Georgia Institute of Technology-Main Campus"></option>
+            <option value="Harvard University"></option>
+            <option value="Illinois Institute of Technology"></option>
+            <option value="Imperial College London"></option>
+            <option value="Indian Institute of Technology Bombay"></option>
+            <option value="Indian Institute of Technology Delhi"></option>
+            <option value="Indian Institute of Technology Madras"></option>
+            <option value="Indiana University-Bloomington"></option>
+            <option value="Johns Hopkins University"></option>
+            <option value="Kwame Nkrumah University of Science &amp; Technology"></option>
+            <option value="London Business School"></option>
+            <option value="Makerere University"></option>
+            <option value="Massachusetts Institute of Technology"></option>
+            <option value="McGill University"></option>
+            <option value="Michigan State University"></option>
+            <option value="Mila - Quebec Artificial Intelligence Institute"></option>
+            <option value="Minnesota State University-Mankato"></option>
+            <option value="New Jersey Institute of Technology"></option>
+            <option value="New York University"></option>
+            <option value="Northeastern University"></option>
+            <option value="Northumbria University"></option>
+            <option value="Northwestern University"></option>
+            <option value="Ohio State University-Main Campus"></option>
+            <option value="Pennsylvania State University-Main Campus"></option>
+            <option value="Princeton University"></option>
+            <option value="Purdue University-Main Campus"></option>
+            <option value="Rice University"></option>
+            <option value="Stanford University"></option>
+            <option value="Syracuse University"></option>
+            <option value="Technical University of Munich"></option>
+            <option value="The London School of Economics and Political Science"></option>
+            <option value="The University of Edinburgh"></option>
+            <option value="The University of Texas at Austin"></option>
+            <option value="Trinity College Dublin"></option>
+            <option value="Universit&#233; Cheikh Anta Diop de Dakar"></option>
+            <option value="University College Cork"></option>
+            <option value="University College London"></option>
+            <option value="University of California-Berkeley"></option>
+            <option value="University of California-Irvine"></option>
+            <option value="University of California-Los Angeles"></option>
+            <option value="University of California-San Diego"></option>
+            <option value="University of Cambridge"></option>
+            <option value="University of Cape Town"></option>
+            <option value="University of Chicago"></option>
+            <option value="University of Exeter"></option>
+            <option value="University of Florida"></option>
+            <option value="University of Georgia"></option>
+            <option value="University of Ghana"></option>
+            <option value="University of Illinois Urbana-Champaign"></option>
+            <option value="University of Lagos"></option>
+            <option value="University of Louisville"></option>
+            <option value="University of Maryland-College Park"></option>
+            <option value="University of Massachusetts-Amherst"></option>
+            <option value="University of Michigan-Ann Arbor"></option>
+            <option value="University of Missouri-Columbia"></option>
+            <option value="University of Nairobi"></option>
+            <option value="University of Nevada-Las Vegas"></option>
+            <option value="University of North Carolina at Chapel Hill"></option>
+            <option value="University of Oxford"></option>
+            <option value="University of Pennsylvania"></option>
+            <option value="University of Pittsburgh-Pittsburgh Campus"></option>
+            <option value="University of Rwanda"></option>
+            <option value="University of San Francisco"></option>
+            <option value="University of Southern California"></option>
+            <option value="University of Toronto St. George"></option>
+            <option value="University of Victoria"></option>
+            <option value="University of Virginia-Main Campus"></option>
+            <option value="University of Washington-Seattle Campus"></option>
+            <option value="University of Waterloo"></option>
+            <option value="University of Wisconsin-Madison"></option>
+            <option value="Vanderbilt University"></option>
+            <option value="Yale University"></option>
+          </datalist>
         </div>
 
         <div class="form-group">

@@ -231,6 +231,7 @@ async function fetchProjects() {
 let projects = [];
 let activeCategory = 'all';
 let searchQuery = '';
+let renderLimit = 9;
 
 // ── DOM ──
 const projectsGrid = document.getElementById('projectsGrid');
@@ -311,16 +312,30 @@ function renderProjects() {
 
   if (projects.length === 0) {
     noProjectsYet.style.display = '';
+    const loadMoreContainer = document.getElementById('loadMoreContainer');
+    if (loadMoreContainer) loadMoreContainer.style.display = 'none';
     return;
   }
   if (filtered.length === 0) {
     emptyState.style.display = '';
+    const loadMoreContainer = document.getElementById('loadMoreContainer');
+    if (loadMoreContainer) loadMoreContainer.style.display = 'none';
     return;
   }
 
-  filtered.forEach((project, index) => {
+  const toRender = filtered.slice(0, renderLimit);
+  toRender.forEach((project, index) => {
     projectsGrid.appendChild(createProjectCard(project, index));
   });
+
+  const loadMoreContainer = document.getElementById('loadMoreContainer');
+  if (loadMoreContainer) {
+    if (filtered.length > renderLimit) {
+      loadMoreContainer.style.display = 'block';
+    } else {
+      loadMoreContainer.style.display = 'none';
+    }
+  }
 }
 
 // ── Category Filtering ──
@@ -330,14 +345,25 @@ categoryPills.addEventListener('click', (e) => {
   categoryPills.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   activeCategory = btn.dataset.cat;
+  renderLimit = 9;
   renderProjects();
 });
 
 // ── Search ──
 searchInput.addEventListener('input', (e) => {
   searchQuery = e.target.value;
+  renderLimit = 9;
   renderProjects();
 });
+
+// ── Load More ──
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+if (loadMoreBtn) {
+  loadMoreBtn.addEventListener('click', () => {
+    renderLimit += 9;
+    renderProjects();
+  });
+}
 
 // ── Tag Selection (Form) ──
 let selectedTags = new Set();
