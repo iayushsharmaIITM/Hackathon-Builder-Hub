@@ -288,7 +288,13 @@ addEmailForm.addEventListener('submit', async (e) => {
       alert("You must define a password when creating an Admin.");
       btn.textContent = 'Add'; btn.disabled = false; return;
     }
-    const { error: authError } = await supabaseClient.auth.signUp({ email, password });
+    
+    // Create a temporary phantom client so it doesn't overwrite your master session
+    const tempClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { persistSession: false, autoRefreshToken: false }
+    });
+
+    const { error: authError } = await tempClient.auth.signUp({ email, password });
     if (authError) {
       alert('Error registering Supabase Auth Password: ' + authError.message);
       btn.textContent = 'Add'; btn.disabled = false; return;
