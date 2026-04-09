@@ -174,6 +174,9 @@ const closeModalBtn = document.getElementById('closeSubmitModal');
 async function openSubmitModal(e) {
   if (e) e.preventDefault();
   
+  // Real-time synchronization check across tabs
+  currentBuilderEmail = localStorage.getItem('cbc_builder_email') || null;
+  
   if (!currentBuilderEmail) {
     intendedAction = 'submit';
     openLoginModal();
