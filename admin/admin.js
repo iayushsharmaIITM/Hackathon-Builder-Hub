@@ -47,6 +47,8 @@ const cancelAddEmailBtn = document.getElementById('cancelAddEmailBtn');
 const addEmailForm = document.getElementById('addEmailForm');
 const searchUserEmail = document.getElementById('searchUserEmail');
 const filterUserRole = document.getElementById('filterUserRole');
+const selectAllEmails = document.getElementById('selectAllEmails');
+const batchDeleteBtn = document.getElementById('batchDeleteBtn');
 
 // ── State ──
 let isAdmin = false;
@@ -309,8 +311,9 @@ function renderEmails() {
   const ambassadors = filteredData.filter(e => (e.role || 'admin') === 'ambassador');
 
   const createItem = (e) => `
-    <div class="admin-item">
-      <div class="admin-item-info">
+    <div class="admin-item" style="display: flex; align-items: center;">
+      ${e.email !== userEmail ? `<input type="checkbox" class="email-checkbox" value="${e.id}" style="margin-right: 12px; transform: scale(1.2);">` : '<div style="width: 24px; margin-right: 12px;"></div>'}
+      <div class="admin-item-info" style="flex: 1;">
         <div class="admin-item-title">${escapeHtml(e.email)}</div>
         <div class="admin-item-meta">Role: ${escapeHtml(e.role || 'admin')}</div>
       </div>
@@ -333,6 +336,7 @@ function renderEmails() {
   }
   
   emailsList.innerHTML = html;
+  if (typeof updateBatchDeleteUI === 'function') updateBatchDeleteUI();
 }
 
 window.deleteEmail = async function(id, emailTarget) {
@@ -345,6 +349,69 @@ window.deleteEmail = async function(id, emailTarget) {
     loadEmails();
   }
 };
+
+// ── Batch Delete Logic ──
+function updateBatchDeleteUI() {
+  const checkboxes = document.querySelectorAll('.email-checkbox');
+  const checked = document.querySelectorAll('.email-checkbox:checked');
+  
+  if (selectAllEmails) {
+    selectAllEmails.checked = checkboxes.length > 0 && checkboxes.length === checked.length;
+  }
+  
+  if (batchDeleteBtn) {
+    if (checked.length > 0) {
+      batchDeleteBtn.style.display = 'block';
+      batchDeleteBtn.textContent = `Delete (${checked.length})`;
+    } else {
+      batchDeleteBtn.style.display = 'none';
+      batchDeleteBtn.textContent = 'Delete (0)';
+    }
+  }
+}
+
+if (selectAllEmails) {
+  selectAllEmails.addEventListener('change', (e) => {
+    const isChecked = e.target.checked;
+    document.querySelectorAll('.email-checkbox').forEach(cb => cb.checked = isChecked);
+    updateBatchDeleteUI();
+  });
+}
+
+if (emailsList) {
+  emailsList.addEventListener('change', (e) => {
+    if (e.target.classList.contains('email-checkbox')) {
+      updateBatchDeleteUI();
+    }
+  });
+}
+
+if (batchDeleteBtn) {
+  batchDeleteBtn.addEventListener('click', async () => {
+    const checked = document.querySelectorAll('.email-checkbox:checked');
+    if (checked.length === 0) return;
+    
+    if (!confirm(`Are you sure you want to remove ${checked.length} users?`)) return;
+    
+    const idsToDelete = Array.from(checked).map(cb => cb.value);
+    
+    batchDeleteBtn.textContent = 'Deleting...';
+    batchDeleteBtn.disabled = true;
+    
+    const { error } = await supabaseClient.from('authorized_emails').delete().in('id', idsToDelete);
+    
+    batchDeleteBtn.disabled = false;
+    
+    if (error) {
+      alert('Failed to delete users: ' + error.message);
+    } else {
+      logAdminAction(`Batch removed ${idsToDelete.length} users.`);
+      if (selectAllEmails) selectAllEmails.checked = false;
+      updateBatchDeleteUI();
+      loadEmails();
+    }
+  });
+}
 
 // ── Email Management ──
 if (searchUserEmail) searchUserEmail.addEventListener('input', renderEmails);

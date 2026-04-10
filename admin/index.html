@@ -111,13 +111,18 @@
           </div>
         </form>
 
-        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+        <div style="display: flex; gap: 12px; margin-bottom: 16px; align-items: center;">
           <input type="text" id="searchUserEmail" class="form-input" placeholder="Search by email..." style="flex: 1;" />
           <select id="filterUserRole" class="form-input" style="width: auto;">
             <option value="all">All Roles</option>
             <option value="admin">Admins Only</option>
             <option value="ambassador">Ambassadors Only</option>
           </select>
+          <label style="display: flex; align-items: center; cursor: pointer; font-size: 0.9rem; user-select: none; margin-left: 8px;">
+            <input type="checkbox" id="selectAllEmails" style="margin-right: 6px; transform: scale(1.1);">
+            Select All
+          </label>
+          <button id="batchDeleteBtn" class="btn btn-outline btn-sm" style="color: #D32F2F; border-color: #D32F2F; padding: 8px 16px; display: none;">Delete (0)</button>
         </div>
 
         <div class="admin-list" id="emailsList">
