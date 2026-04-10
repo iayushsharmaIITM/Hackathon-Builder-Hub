@@ -420,11 +420,11 @@ addEmailForm.addEventListener('submit', async (e) => {
 
 // CSV Upload
 downloadTemplateBtn.addEventListener('click', () => {
-  const csvContent = "data:text/csv;charset=utf-8,email,role\nadmin1@example.com,admin\nambassador1@example.com,ambassador";
+  const csvContent = "data:text/csv;charset=utf-8,email\nambassador1@example.com\nambassador2@example.com";
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
-  link.setAttribute("download", "admin_template.csv");
+  link.setAttribute("download", "ambassadors_template.csv");
   document.body.appendChild(link); // Required for FF
   link.click();
   document.body.removeChild(link);
@@ -444,18 +444,13 @@ csvFileInput.addEventListener('change', (e) => {
     // Skip header if it exists
     const startIndex = lines[0].toLowerCase().includes('email') ? 1 : 0;
     
-    // Setup default fallback role via dropdown option
-    const presetRole = document.getElementById('csvRoleSelect').value || 'ambassador';
-    
     for (let i = startIndex; i < lines.length; i++) {
         const row = lines[i].split(',');
         const email = row[0] ? row[0].replace(/['"-]+/g, '').trim() : '';
-        let role = row[1] ? row[1].replace(/['"-]+/g, '').trim().toLowerCase() : presetRole;
-        if (role !== 'admin' && role !== 'ambassador') role = presetRole;
 
         // basic regex check
         if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            emailsToInsert.push({ email, role });
+            emailsToInsert.push({ email, role: 'ambassador' });
         }
     }
 
